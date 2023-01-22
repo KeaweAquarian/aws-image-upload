@@ -6,8 +6,8 @@ import java.util.UUID;
 
 public class UserProfile {
 
-    private UUID  userProfile;
-    private String username;
+    private final UUID  userProfile;
+    private final String username;
     private String userProfileImage;
 
     public UserProfile(UUID userProfile, String username, String userProfileImage) {
@@ -20,17 +20,17 @@ public class UserProfile {
         return userProfile;
     }
 
-    public void setUserProfile(UUID userProfile) {
-        this.userProfile = userProfile;
-    }
+//    public void setUserProfile(UUID userProfile) {
+//        this.userProfile = userProfile;
+//    }
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+//    public void setUsername(String username) {
+//        this.username = username;
+//    }
 
     public Optional<String> getUserProfileImage() {
         return Optional.ofNullable(userProfileImage);

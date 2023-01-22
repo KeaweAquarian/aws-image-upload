@@ -24,6 +24,21 @@ public class UserProfileService {
 
     }
 
+    byte[] downloadUserProfileImage(UUID userProfileID) {
+        UserProfile user = userProfileDataAccessService
+                .getUserProfile()
+                .stream()
+                .filter(userProfile -> userProfile.getUserProfile().equals(userProfileID))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException(String.format("User profile %s not found", userProfileID)));
+        String path = String.format("%s/%s",
+                BucketName.PROFILE_IMAGE.getBucketName(),
+                user.getUserProfile());
+      return user.getUserProfileImage()
+                .map(key -> fileStore.download(path, key))
+                .orElse(new byte[0]);
+
+    }
     List<UserProfile> getUserProfiles(){
 
         return userProfileDataAccessService.getUserProfile();
@@ -45,9 +60,11 @@ public class UserProfileService {
                 metaData.put("Content-Length", String.valueOf(file.getSize()));
 
                String path = String.format("%s/%s", BucketName.PROFILE_IMAGE.getBucketName(), user.getUserProfile());
-               String fileName = String.format("%s-%s", file.getName(), UUID.randomUUID());
+               String fileName = String.format("%s-%s", file.getOriginalFilename(), UUID.randomUUID());
                 try {
                     fileStore.save(path, fileName, Optional.of(metaData), file.getInputStream() );
+
+                    user.setUserProfileImage(fileName);
                 } catch (IOException e) {
                     throw new IllegalStateException(e);
                 }
@@ -56,4 +73,6 @@ public class UserProfileService {
         }else throw new IllegalStateException("File is empty!");
 
     }
+
+
 }
