@@ -1,3 +1,5 @@
+//Fake database for testing purposes.
+
 package com.keaweaquarian.awsimageupload.datastore;
 
 import com.keaweaquarian.awsimageupload.profile.UserProfile;
